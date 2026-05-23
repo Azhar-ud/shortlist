@@ -1,0 +1,163 @@
+@import "tailwindcss";
+
+:root {
+  --bg: oklch(9% 0.006 70);
+  --bg-elevated: oklch(12% 0.008 70);
+  --bg-card: oklch(14% 0.01 70);
+  --bg-card-hover: oklch(17% 0.012 70);
+  --border: oklch(20% 0.008 70);
+  --border-strong: oklch(30% 0.012 70);
+  --text: oklch(95% 0.005 80);
+  --text-muted: oklch(66% 0.012 70);
+  --text-dim: oklch(46% 0.012 70);
+
+  --accent: oklch(74% 0.13 160);
+  --accent-dim: oklch(56% 0.10 160);
+  --accent-soft: oklch(28% 0.06 160);
+
+  --up: oklch(75% 0.17 145);
+  --warn: oklch(80% 0.16 80);
+  --down: oklch(70% 0.21 25);
+
+  --grid: oklch(17% 0.008 70);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-bg-card: var(--bg-card);
+  --color-bg-card-hover: var(--bg-card-hover);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-text-dim: var(--text-dim);
+  --color-accent: var(--accent);
+  --color-accent-dim: var(--accent-dim);
+  --color-accent-soft: var(--accent-soft);
+  --color-up: var(--up);
+  --color-warn: var(--warn);
+  --color-down: var(--down);
+  --color-grid: var(--grid);
+
+  --font-display: var(--font-display);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "ss01", "ss02", "cv01", "cv11";
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-dim);
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.pulse-dot {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+.pulse-dot::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 999px;
+  background: var(--accent);
+  opacity: 0.4;
+  animation: pulse-ring 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.6;
+  }
+  80%,
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+.grid-bg {
+  background-image:
+    linear-gradient(to right, var(--grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse at top, black 30%, transparent 80%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .pulse-dot::before {
+    display: none;
+  }
+}
+
+/* Score color helpers — used by ScoreRing */
+.score-hue-low {
+  --score-color: var(--down);
+}
+.score-hue-mid {
+  --score-color: var(--warn);
+}
+.score-hue-high {
+  --score-color: var(--up);
+}
+
+/* "Skeleton" pulse for loading states */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-elevated) 0%,
+    var(--bg-card-hover) 50%,
+    var(--bg-elevated) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton 1.6s ease-in-out infinite;
+}
+@keyframes skeleton {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
