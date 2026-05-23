@@ -1,5 +1,7 @@
 # Shortlist
 
+[![e2e](https://github.com/Azhar-ud/portfolio-demos-e2e/actions/workflows/test.yml/badge.svg)](https://github.com/Azhar-ud/portfolio-demos-e2e/actions/workflows/test.yml)
+
 An AI screening copilot. Paste a job description, drop in a batch of resumes,
 and get a ranked shortlist with cited strengths, gaps, and reasoning. No
 signup required.
