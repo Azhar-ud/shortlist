@@ -1,48 +1,46 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { Bricolage_Grotesque, Geist, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-display",
+  subsets: ["latin"],
+  axes: ["wdth"],
+});
 
 const geist = Geist({
   variable: "--font-sans",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
+const jetbrains = JetBrains_Mono({
   variable: "--font-mono",
   subsets: ["latin"],
-});
-
-const instrumentSerif = Instrument_Serif({
-  variable: "--font-display",
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
+  weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {
-  title: "Shortlist — AI screening copilot",
+  title: "Shortlist — Calibrated AI screening",
   description:
-    "Paste a job description, drop in a batch of resumes, and let the model rank fit with structured reasoning. No signup needed.",
-  metadataBase: new URL("https://shortlist-demo.vercel.app"),
+    "Paste a job description, drop in resumes, and let the model rank fit with cited reasoning. Built for recruiters who need honest signal in twelve seconds, not slop.",
+  metadataBase: new URL("https://shortlist-opal.vercel.app"),
   openGraph: {
-    title: "Shortlist — AI screening copilot",
+    title: "Shortlist — Calibrated AI screening",
     description:
-      "AI-ranked resume screening. Paste a JD, drop in resumes, get a ranked shortlist with reasoning.",
+      "Honest, cited resume screening with a calibrated rubric. No signup.",
     type: "website",
   },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="en"
-      className={`${geist.variable} ${geistMono.variable} ${instrumentSerif.variable} h-full antialiased`}
+      className={`${bricolage.variable} ${geist.variable} ${jetbrains.variable} h-full antialiased`}
     >
-      <body className="min-h-full bg-bg text-text">{children}</body>
+      <body className="relative min-h-full bg-bg text-ink">{children}</body>
     </html>
   );
 }

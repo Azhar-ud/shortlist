@@ -1,5 +1,7 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Brand } from "@/components/Brand";
+import { ChevronRight } from "lucide-react";
+import { Shell, PageHeader } from "@/components/Shell";
 import { ResultsView } from "@/components/ResultsView";
 import { getServerSupabase } from "@/lib/supabase/server";
 import { rowToCandidate } from "@/lib/analyze";
@@ -59,11 +61,32 @@ export default async function ResultsPage({ params }: PageProps) {
   if (!view) notFound();
 
   return (
-    <div className="min-h-dvh">
-      <div className="mx-auto max-w-[1200px]">
-        <Brand />
-        <ResultsView id={id} initial={view} />
-      </div>
-    </div>
+    <Shell>
+      <PageHeader
+        eyebrow={
+          <Breadcrumb
+            kind={view.job.kind}
+            title={view.job.title}
+          />
+        }
+        title={view.job.title}
+      />
+      <ResultsView id={id} initial={view} />
+    </Shell>
+  );
+}
+
+function Breadcrumb({ kind, title }: { kind: "demo" | "user"; title: string }) {
+  return (
+    <span className="flex items-center gap-1.5">
+      <Link href="/dashboard" className="hover:text-clay-strong">
+        Screenings
+      </Link>
+      <ChevronRight className="h-3 w-3 text-ink-faint" aria-hidden />
+      <span className="text-ink-dim normal-case tracking-normal">
+        {kind === "demo" ? "Sample · " : ""}
+        {title}
+      </span>
+    </span>
   );
 }

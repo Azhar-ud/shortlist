@@ -1,27 +1,27 @@
 import Link from "next/link";
+import { Logo } from "./Logo";
 
-export function Brand() {
+interface BrandProps {
+  size?: "sm" | "md";
+}
+
+export function Brand({ size = "md" }: BrandProps) {
   return (
-    <div className="flex items-center justify-between gap-4 border-b border-border px-6 py-4">
-      <Link href="/" className="flex items-baseline gap-3">
-        <span className="font-display text-2xl italic leading-none">Shortlist</span>
-        <span className="hidden text-[11px] uppercase tracking-[0.22em] text-text-dim sm:inline">
-          AI screening copilot
-        </span>
-      </Link>
-      <nav className="flex items-center gap-5 text-xs">
-        <Link href="/new" className="text-text-muted hover:text-accent">
-          New screening
-        </Link>
-        <a
-          href="https://github.com/Azhar-ud/shortlist"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-text-muted hover:text-accent"
+    <Link
+      href="/"
+      className="group inline-flex items-center gap-2.5 transition-opacity hover:opacity-90"
+    >
+      <Logo size={size === "sm" ? 18 : 22} />
+      <span className="flex items-baseline gap-1.5">
+        <span
+          className={`font-display ${size === "sm" ? "text-[15px]" : "text-[17px]"} font-semibold tracking-tight text-ink`}
         >
-          GitHub
-        </a>
-      </nav>
-    </div>
+          Shortlist
+        </span>
+        <span className="font-mono text-[10px] tracking-[0.16em] text-ink-faint">
+          0.1
+        </span>
+      </span>
+    </Link>
   );
 }

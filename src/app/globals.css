@@ -1,44 +1,74 @@
 @import "tailwindcss";
 
+/* ──────────────────────────────────────────────────────────────────────
+   SHORTLIST — "Editor's room for recruiters"
+   Warm-cream paper background, deep ink-slate text, single clay accent.
+   Distinctive from Pulse (dark terminal) and Pencil (light coral paper).
+   ────────────────────────────────────────────────────────────────────── */
+
 :root {
-  --bg: oklch(9% 0.006 70);
-  --bg-elevated: oklch(12% 0.008 70);
-  --bg-card: oklch(14% 0.01 70);
-  --bg-card-hover: oklch(17% 0.012 70);
-  --border: oklch(20% 0.008 70);
-  --border-strong: oklch(30% 0.012 70);
-  --text: oklch(95% 0.005 80);
-  --text-muted: oklch(66% 0.012 70);
-  --text-dim: oklch(46% 0.012 70);
+  --bg: oklch(98% 0.008 80);
+  --bg-soft: oklch(96% 0.012 75);
+  --bg-card: oklch(100% 0 0);
+  --bg-sidebar: oklch(96.5% 0.012 70);
+  --bg-elevated: oklch(99% 0.005 80);
 
-  --accent: oklch(74% 0.13 160);
-  --accent-dim: oklch(56% 0.10 160);
-  --accent-soft: oklch(28% 0.06 160);
+  --border: oklch(91% 0.012 250);
+  --border-strong: oklch(83% 0.014 250);
+  --border-dashed: oklch(86% 0.014 250);
 
-  --up: oklch(75% 0.17 145);
-  --warn: oklch(80% 0.16 80);
-  --down: oklch(70% 0.21 25);
+  --ink: oklch(22% 0.025 250);
+  --ink-muted: oklch(46% 0.018 250);
+  --ink-dim: oklch(64% 0.015 250);
+  --ink-faint: oklch(80% 0.012 250);
 
-  --grid: oklch(17% 0.008 70);
+  --clay: oklch(55% 0.18 35);
+  --clay-strong: oklch(48% 0.20 35);
+  --clay-soft: oklch(94% 0.04 35);
+  --clay-tint: oklch(97% 0.02 35);
+
+  --signal-good: oklch(58% 0.13 165);
+  --signal-good-soft: oklch(94% 0.04 165);
+  --signal-warn: oklch(68% 0.14 75);
+  --signal-warn-soft: oklch(96% 0.04 75);
+  --signal-bad: oklch(58% 0.18 25);
+  --signal-bad-soft: oklch(95% 0.03 25);
+
+  --shadow-sm: 0 1px 0 oklch(75% 0.012 250 / 0.05),
+               0 1px 2px oklch(40% 0.018 250 / 0.04);
+  --shadow-md: 0 2px 0 oklch(75% 0.012 250 / 0.04),
+               0 4px 12px oklch(40% 0.018 250 / 0.06);
+  --shadow-lg: 0 1px 0 oklch(75% 0.012 250 / 0.04),
+               0 12px 32px oklch(35% 0.022 250 / 0.10);
 }
 
 @theme inline {
   --color-bg: var(--bg);
-  --color-bg-elevated: var(--bg-elevated);
+  --color-bg-soft: var(--bg-soft);
   --color-bg-card: var(--bg-card);
-  --color-bg-card-hover: var(--bg-card-hover);
+  --color-bg-sidebar: var(--bg-sidebar);
+  --color-bg-elevated: var(--bg-elevated);
+
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
-  --color-text: var(--text);
-  --color-text-muted: var(--text-muted);
-  --color-text-dim: var(--text-dim);
-  --color-accent: var(--accent);
-  --color-accent-dim: var(--accent-dim);
-  --color-accent-soft: var(--accent-soft);
-  --color-up: var(--up);
-  --color-warn: var(--warn);
-  --color-down: var(--down);
-  --color-grid: var(--grid);
+  --color-border-dashed: var(--border-dashed);
+
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-dim: var(--ink-dim);
+  --color-ink-faint: var(--ink-faint);
+
+  --color-clay: var(--clay);
+  --color-clay-strong: var(--clay-strong);
+  --color-clay-soft: var(--clay-soft);
+  --color-clay-tint: var(--clay-tint);
+
+  --color-good: var(--signal-good);
+  --color-good-soft: var(--signal-good-soft);
+  --color-warn: var(--signal-warn);
+  --color-warn-soft: var(--signal-warn-soft);
+  --color-bad: var(--signal-bad);
+  --color-bad-soft: var(--signal-bad-soft);
 
   --font-display: var(--font-display);
   --font-sans: var(--font-sans);
@@ -53,69 +83,141 @@
 html,
 body {
   background: var(--bg);
-  color: var(--text);
+  color: var(--ink);
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
-  font-feature-settings: "ss01", "ss02", "cv01", "cv11";
+  font-feature-settings: "ss01", "ss02", "cv11";
+}
+
+/* Subtle paper grain — only on body, not on cards */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
 }
 
 ::selection {
-  background: var(--accent);
-  color: var(--bg);
+  background: var(--clay);
+  color: white;
 }
 
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 10px;
+  height: 10px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
   background: var(--border-strong);
-  border-radius: 3px;
+  border-radius: 999px;
+  border: 2px solid var(--bg);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-dim);
+  background: var(--ink-dim);
 }
 
 .tabular {
   font-variant-numeric: tabular-nums;
 }
 
-.pulse-dot {
-  position: relative;
+/* Display font sits a touch tighter than its natural metrics */
+.font-display {
+  font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "ss01", "ss02", "cv11";
+  letter-spacing: -0.02em;
+}
+
+/* Mono with tabular nums always-on */
+.font-mono {
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Pencil-mark style dotted divider — used in cards */
+.dotted-divider {
+  background-image: linear-gradient(
+    to right,
+    var(--border-strong) 50%,
+    transparent 50%
+  );
+  background-size: 6px 1px;
+  background-repeat: repeat-x;
+  background-position: left center;
+  height: 1px;
+  border: none;
+}
+
+.dashed-divider {
+  border: none;
+  border-top: 1px dashed var(--border-strong);
+}
+
+/* Pill chip baseline */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border-radius: 999px;
+  padding: 0.125rem 0.625rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.6;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Decorative grid for empty states and section dividers */
+.dotted-bg {
+  background-image: radial-gradient(
+    var(--ink-faint) 1px,
+    transparent 1px
+  );
+  background-size: 16px 16px;
+}
+
+/* Caret blink for the cursor decoration on the landing hero */
+.caret::after {
+  content: "▍";
+  margin-left: 0.05em;
+  color: var(--clay);
+  animation: caret-blink 1.1s steps(2, end) infinite;
+}
+@keyframes caret-blink {
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+
+/* Soft skeleton */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-soft) 0%,
+    var(--bg-elevated) 50%,
+    var(--bg-soft) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton 1.6s ease-in-out infinite;
+  border-radius: 6px;
+}
+@keyframes skeleton {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Status indicator dot — color set via inline style */
+.status-dot {
+  display: inline-block;
   width: 8px;
   height: 8px;
   border-radius: 999px;
-  background: var(--accent);
-}
-.pulse-dot::before {
-  content: "";
-  position: absolute;
-  inset: -4px;
-  border-radius: 999px;
-  background: var(--accent);
-  opacity: 0.4;
-  animation: pulse-ring 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-@keyframes pulse-ring {
-  0% {
-    transform: scale(0.6);
-    opacity: 0.6;
-  }
-  80%,
-  100% {
-    transform: scale(2.2);
-    opacity: 0;
-  }
-}
-
-.grid-bg {
-  background-image:
-    linear-gradient(to right, var(--grid) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(ellipse at top, black 30%, transparent 80%);
+  background: var(--color, var(--ink-dim));
+  box-shadow: 0 0 0 3px oklch(from var(--color, var(--ink-dim)) l c h / 0.15);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -125,39 +227,5 @@ body {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
-  }
-  .pulse-dot::before {
-    display: none;
-  }
-}
-
-/* Score color helpers — used by ScoreRing */
-.score-hue-low {
-  --score-color: var(--down);
-}
-.score-hue-mid {
-  --score-color: var(--warn);
-}
-.score-hue-high {
-  --score-color: var(--up);
-}
-
-/* "Skeleton" pulse for loading states */
-.skeleton {
-  background: linear-gradient(
-    90deg,
-    var(--bg-elevated) 0%,
-    var(--bg-card-hover) 50%,
-    var(--bg-elevated) 100%
-  );
-  background-size: 200% 100%;
-  animation: skeleton 1.6s ease-in-out infinite;
-}
-@keyframes skeleton {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
   }
 }

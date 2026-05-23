@@ -1,8 +1,13 @@
 "use client";
 
 import useSWR from "swr";
-import { CandidateRow } from "@/components/CandidateRow";
+import { motion } from "motion/react";
+import { Download, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { Badge } from "@/components/ui/Badge";
+import { CandidateCard } from "@/components/CandidateCard";
+import { JobDescriptionPanel } from "@/components/JobDescriptionPanel";
+import { BehindTheScreening } from "@/components/BehindTheScreening";
 import type { ApiResponse, ScreeningView } from "@/lib/types";
 import { timeAgo } from "@/lib/format";
 
@@ -42,10 +47,13 @@ export function ResultsView({ id, initial }: ResultsViewProps) {
   const total = ranked.length;
   const isRunning =
     view.screening.status === "running" || view.screening.status === "pending";
+  const progress = total > 0 ? Math.round((done / total) * 100) : 0;
 
   function exportCsv() {
     const rows = [
-      ["rank", "name", "score", "recommendation", "strengths", "gaps"].join(","),
+      ["rank", "name", "score", "recommendation", "strengths", "gaps"].join(
+        ","
+      ),
       ...ranked.map((c, i) =>
         [
           String(i + 1),
@@ -66,66 +74,97 @@ export function ResultsView({ id, initial }: ResultsViewProps) {
     URL.revokeObjectURL(url);
   }
 
+  async function copyShare() {
+    try {
+      const url = `${window.location.origin}/r/${id}`;
+      await navigator.clipboard.writeText(url);
+    } catch {
+      /* clipboard not available */
+    }
+  }
+
   return (
-    <div className="mx-auto max-w-4xl px-6 pb-20 pt-10">
-      <header className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p className="text-[11px] uppercase tracking-[0.22em] text-accent">
-            {view.job.kind === "demo" ? "Sample screening" : "Screening"}
-          </p>
-          <h1 className="mt-2 font-display text-4xl leading-tight tracking-tight">
-            {view.job.title}
-          </h1>
-          <p className="mt-1 text-xs text-text-dim">
-            Started {timeAgo(view.screening.createdAt)} · {done} of {total} analyzed
-          </p>
+    <div className="px-6 pb-20 sm:px-10">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border py-5">
+        <div className="flex items-center gap-4">
+          <Badge
+            tone={
+              view.screening.status === "done"
+                ? "good"
+                : view.screening.status === "error"
+                  ? "bad"
+                  : "clay"
+            }
+            dot
+          >
+            {view.screening.status}
+          </Badge>
+          <span className="font-mono text-[12px] text-ink-muted">
+            <span className="text-ink">{done}</span>
+            <span className="text-ink-dim">/</span>
+            <span className="text-ink-dim">{total}</span> analyzed
+          </span>
+          <span className="text-[12px] text-ink-dim">
+            started {timeAgo(view.screening.createdAt)}
+          </span>
         </div>
         <div className="flex items-center gap-2">
+          <Button variant="secondary" size="sm" onClick={copyShare}>
+            <Share2 className="h-3.5 w-3.5" aria-hidden />
+            Copy link
+          </Button>
           <Button
-            variant="secondary"
+            variant="primary"
+            size="sm"
             onClick={exportCsv}
             disabled={done === 0}
           >
+            <Download className="h-3.5 w-3.5" aria-hidden />
             Export CSV
           </Button>
         </div>
-      </header>
+      </div>
 
-      <section className="rounded-2xl border border-border bg-bg-card">
-        <div className="flex items-center justify-between border-b border-border px-6 py-3">
-          <span className="font-mono text-[10px] uppercase tracking-wider text-text-dim">
-            Ranked candidates
-          </span>
-          {isRunning ? (
-            <span className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-accent">
-              <span className="pulse-dot" aria-hidden />
-              Analyzing
-            </span>
-          ) : view.screening.status === "done" ? (
-            <span className="font-mono text-[10px] uppercase tracking-wider text-up">
-              Complete
-            </span>
-          ) : (
-            <span className="font-mono text-[10px] uppercase tracking-wider text-down">
-              Error
-            </span>
-          )}
+      {isRunning ? (
+        <div className="mt-1 mb-6 h-[3px] w-full overflow-hidden rounded-full bg-bg-soft">
+          <motion.div
+            className="h-full bg-clay"
+            initial={false}
+            animate={{ width: `${progress}%` }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          />
         </div>
-        <ol>
-          {ranked.map((c, i) => (
-            <CandidateRow key={c.id} candidate={c} rank={i + 1} />
-          ))}
-        </ol>
-      </section>
+      ) : (
+        <div className="mt-6" />
+      )}
 
-      <details className="mt-6 rounded-2xl border border-border bg-bg-card">
-        <summary className="cursor-pointer px-6 py-4 text-xs uppercase tracking-wider text-text-muted">
-          Show job description
-        </summary>
-        <pre className="whitespace-pre-wrap border-t border-border px-6 py-4 font-sans text-sm leading-relaxed text-text-muted">
-          {view.job.description}
-        </pre>
-      </details>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_360px] lg:gap-8">
+        <section className="flex flex-col gap-3">
+          <h2 className="font-mono text-[10px] uppercase tracking-[0.16em] text-ink-dim">
+            Ranked candidates
+          </h2>
+          <ul className="flex flex-col gap-3">
+            {ranked.map((c, i) => (
+              <motion.li
+                key={c.id}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.25, delay: i * 0.03 }}
+              >
+                <CandidateCard candidate={c} rank={i + 1} />
+              </motion.li>
+            ))}
+          </ul>
+        </section>
+
+        <aside className="flex flex-col gap-4 lg:sticky lg:top-6 lg:self-start">
+          <JobDescriptionPanel
+            title={view.job.title}
+            description={view.job.description}
+          />
+          <BehindTheScreening />
+        </aside>
+      </div>
     </div>
   );
 }
